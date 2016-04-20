@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Michael Guymon"]
   spec.email         = ["michaelguymon@swipely.com"]
 
-  spec.summary       = %q{updoc}
-  spec.description   = %q{updoc}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = 'Generates a report of application producers and consumers'
+  spec.description   = 'Generates a report of application producers and consumers'
+  spec.homepage      = 'https://github.com/swipely/updoc'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
