@@ -19,7 +19,9 @@ module Updoc
               feature: app_feature
             }
 
-            detail[:path] = File.join(*[grape_app.path_prefix.to_s, detail[:path]].compact) if grape_app.path_prefix
+            # XXX: Having to manually adding the path prefix may have changed
+            # from older Grape versions
+            #detail[:path] = File.join(*[grape_app.path_prefix.to_s, detail[:path]].compact) if grape_app.path_prefix
 
             if endpoint.options[:app]
               detail[:feature] = endpoint.options[:app].updoc.feature_name if endpoint.options[:app] < Updoc::Producer
