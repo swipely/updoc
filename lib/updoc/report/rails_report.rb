@@ -58,6 +58,8 @@ module Updoc
 
         depends_on = dependent.updoc.config.depends_on
         depends_on.consumers.each do |name, services|
+          raise "Referenced consumer #{name} has not be defined" unless Updoc::Consumers[name]
+
           consumers[name] = {
             service_type: Updoc::Consumers[name].service_type,
             definition_uri: Updoc::Consumers[name].definition_uri,
