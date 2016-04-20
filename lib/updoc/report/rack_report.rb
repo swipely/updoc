@@ -1,6 +1,8 @@
+require 'rack'
+
 module Updoc
   module Report
-    class Rack
+    class RackReport
       include Updoc::Report
 
       def self.report!
