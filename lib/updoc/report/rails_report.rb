@@ -1,6 +1,6 @@
 module Updoc
   module Report
-    class Rails
+    class RailsReport
       include Updoc::Report
 
       def self.report!(rails_app = ::Rails.application)
