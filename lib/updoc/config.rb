@@ -1,7 +1,7 @@
 module Updoc
   module Config
 
-    Storage = Struct.new(:feature_name, :config)
+    FeatureConfig = Struct.new(:feature_name, :config)
 
     def self.included(base)
       base.extend(ClassMethods)
@@ -9,7 +9,7 @@ module Updoc
 
     module ClassMethods
       def updoc
-        @updoc ||= Storage.new(
+        @updoc ||= FeatureConfig.new(
           self.to_s.underscore,
           OpenStruct.new
         )
