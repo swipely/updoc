@@ -6,6 +6,18 @@ module Updoc
 
     GrapeApp = Struct.new(:app, :path_prefix)
 
+    def base_report
+      {
+        name: Updoc.application_name,
+        updoc_version: Updoc::VERSION
+      }.tap do |report|
+        if Updoc.git?
+          git_uri = `git config --get remote.origin.url`.strip
+          report[:definition_uri] = "git:#{git_uri}/updoc.yml"
+        end
+      end
+    end
+
     def map_grape_endpoints(grape_apps)
       updoc_supported_routes = grape_apps.flat_map do |grape_app|
         app_feature = grape_app.app.updoc.feature_name if grape_app.app < Updoc::Config
@@ -40,6 +52,26 @@ module Updoc
             memo["rest:#{route[:method]}:#{route[:path]}"] = route.slice(:description, :content_types)
           end
         }
+      end
+    end
+
+    def map_updoc_consumers
+      dependents = ObjectSpace.each_object(::Class).select { |x| x < Updoc::DependsOn }
+      dependents.each_with_object({}) do |dependent, memo|
+        consumers = {}
+
+        depends_on = dependent.updoc.config.depends_on
+        depends_on.consumers.each do |name, services|
+          raise "Referenced consumer #{name} has not be defined" unless Updoc::Consumers[name]
+
+          consumers[name] = {
+            service_type: Updoc::Consumers[name].service_type,
+            definition_uri: Updoc::Consumers[name].definition_uri,
+            services: services
+          }
+        end
+
+        memo[dependent.updoc.feature_name] = consumers
       end
     end
 
