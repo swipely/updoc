@@ -3,7 +3,7 @@ require 'updoc/config'
 
 module Updoc
   module Consumer
-
+    RegisterError = Class.new(StandardError)
     ConsumerConfig = Struct.new(:consumer_name, :services)
 
     def self.included(base)
@@ -20,7 +20,10 @@ module Updoc
       end
 
       def register_consumer_service(*service_urns)
-        fail 'Must register_consumer before registering a service' if config.consumer.consumer_name.nil?
+        if config.consumer.consumer_name.nil?
+          raise RegisterError.new('Must register_consumer before registering a service')
+        end
+
         Updoc::Consumers.register_consumer_services(config.consumer.consumer_name, service_urns)
         config.consumer.services += service_urns
       end
