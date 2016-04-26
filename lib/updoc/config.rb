@@ -1,3 +1,5 @@
+require 'ostruct'
+
 module Updoc
   module Config
 
@@ -10,7 +12,7 @@ module Updoc
     module ClassMethods
       def updoc
         @updoc ||= FeatureConfig.new(
-          self.to_s.underscore,
+          Updoc.underscore(self.name),
           OpenStruct.new
         )
       end
